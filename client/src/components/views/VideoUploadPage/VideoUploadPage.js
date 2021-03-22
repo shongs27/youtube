@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Typography, Button, Form, message, Input, Icon } from "antd";
-import axios from "axios";
+import Axios from "axios";
 
 // dropzone 다운받아야함
 import Dropzone from "react-dropzone";
 
 import { VIDEO_SERVER } from "../../Config";
+
+import { useSelector } from "react-redux";
+import { PromiseProvider } from "mongoose";
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -23,11 +26,17 @@ const CategoryOptions = [
   { value: 4, label: "Sports" },
 ];
 
-function VideoUploadPage() {
+function VideoUploadPage(props) {
+  const user = useSelector((state) => state.user);
+
   const [VideoTitle, setVideoTitle] = useState("");
   const [Description, setDescription] = useState("");
   const [Private, setPrivate] = useState(0);
   const [Category, setCategory] = useState("Film & Animation");
+
+  const [FilePath, setFilePath] = useState("");
+  const [Duration, setDuration] = useState("");
+  const [ThumbnailPath, setThumbnailPath] = useState("");
 
   const onTitleChange = (e) => {
     setVideoTitle(e.currentTarget.value);
@@ -47,17 +56,59 @@ function VideoUploadPage() {
 
   const onDrop = (files) => {
     let formData = new FormData();
-    console.log(files);
+
     const config = {
       header: { "content-type": "multipart/form-data" },
     };
     formData.append("file", files[0]);
 
-    axios.post(`${VIDEO_SERVER}/uploadfiles`, formData, config).then((res) => {
+    Axios.post(`${VIDEO_SERVER}/uploadfiles`, formData, config).then((res) => {
       if (res.data.success) {
         console.log(res.data);
+
+        let variable = {
+          url: res.data.url,
+          fileName: res.data.fileName,
+        };
+
+        setFilePath(res.data.url);
+
+        Axios.post(`${VIDEO_SERVER}/thumbnail`, variable).then((res) => {
+          if (res.data.success) {
+            setDuration(res.data.fileDuration);
+            console.log("여기다", res.data.url);
+            setThumbnailPath(res.data.url);
+          } else {
+            alert("썸네일 생성에 실패했습니다");
+          }
+        });
       } else {
         alert("비디오 업로드를 실패했습니다");
+      }
+    });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    //데이터베이스 스키마에 넣어야하니깐 나눠줌
+    const variables = {
+      writer: user.userData._id,
+      title: VideoTitle,
+      description: Description,
+      privacy: Private,
+      filePath: FilePath,
+      category: Category,
+      duration: Duration,
+      thumbnail: ThumbnailPath,
+    };
+
+    Axios.post("/api/video/uploadVideo", variables).then((res) => {
+      if (res.data.success) {
+        message.success("성공적으로 업로드 했습니다.");
+        props.history.push("/");
+      } else {
+        alert("비디오 업로드에 실패 했습니다");
       }
     });
   };
@@ -68,10 +119,11 @@ function VideoUploadPage() {
         <Title level={2}>Upload Video</Title>
       </div>
 
-      <Form onSubmit>
+      {/* Form과 button onSubmit={onSubmit} 언제 어떻게 붙여주는지 눈치 싸움 */}
+      <Form>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           {/* Drop Zone */}
-          <Dropzone onDrop={onDrop} multiple={false} maxSize={100000000}>
+          <Dropzone onDrop={onDrop} multiple={false} /*maxSize={1000000}*/>
             {({ getRootProps, getInputProps }) => (
               <div
                 style={{
@@ -90,9 +142,16 @@ function VideoUploadPage() {
             )}
           </Dropzone>
           {/* Drop Zone */}
-          <div>
-            <img src alt />
-          </div>
+
+          {/* thumbnail */}
+          {ThumbnailPath && (
+            <div>
+              <img
+                src={`http://localhost:5000/${ThumbnailPath}`}
+                alt="thumbnail"
+              />
+            </div>
+          )}
         </div>
 
         <br />
@@ -129,7 +188,7 @@ function VideoUploadPage() {
         <br />
         <br />
 
-        <Button type="primary" size="large" onClick>
+        <Button type="primary" size="large" onClick={onSubmit}>
           submit
         </Button>
       </Form>
