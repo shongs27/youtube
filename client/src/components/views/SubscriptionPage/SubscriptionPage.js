@@ -8,10 +8,15 @@ import moment from "moment";
 const { Title } = Typography;
 const { Meta } = Card;
 
-function LandingPage() {
+function Subscription() {
   const [Video, setVideo] = useState([]);
   useEffect(() => {
-    Axios.get("/api/video/getVideos").then((res) => {
+    const subscriptionVariation = {
+        userFrom: localStorage.getItem('userId');
+    }
+
+    Axios.get("/api/video/getSubscriptionVideos", 
+    ).then((res) => {
       if (res.data.success) {
         setVideo(res.data.allvideos);
       } else {
@@ -66,4 +71,4 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;
+export default Subscription;
