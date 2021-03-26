@@ -1,11 +1,13 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 
-function Subscriber(props) {
+function Subscribe(props) {
   const [SubscribeNumber, setSubscribeNumber] = useState(0);
   const [Subscribed, setSubscribed] = useState(false);
 
+  //////////////////////// 구독 정보 /////////////////////////
   useEffect(() => {
+    //구독자 수 정보 가져오기
     let variable = { userTo: props.userTo };
 
     Axios.post("/api/subscribe/subscribeNumber", variable).then((res) => {
@@ -16,9 +18,10 @@ function Subscriber(props) {
       }
     });
 
+    //로그인한 내가 구독 유무 정보 가져오기
     let subscribedVariable = {
       userTo: props.userTo,
-      userFrom: localStorage.getItem("userId"),
+      userFrom: localStorage.getItem("userId"), // 1)
     };
 
     Axios.post("api/subscribe/subscribed", subscribedVariable).then((res) => {
@@ -30,12 +33,13 @@ function Subscriber(props) {
     });
   }, []);
 
+  /////////////////////////// 구독 클릭 /////////////////////////
   const onSubscribe = () => {
     let subscribedVariable = {
       userTo: props.userTo,
-      userFrom: props.userForm,
+      userFrom: props.userFrom, // 2) props설정으로 가져와도 된다
     };
-    //이미 구독중이라면
+    // 이미 구독중이라면
     if (Subscribed) {
       Axios.post("/api/subscribe/unsubscribe", subscribedVariable).then(
         (res) => {
@@ -80,4 +84,4 @@ function Subscriber(props) {
   );
 }
 
-export default Subscriber;
+export default Subscribe;

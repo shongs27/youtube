@@ -7,7 +7,7 @@ const subscriberSchema = mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    userForm: {
+    userFrom: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
@@ -15,6 +15,6 @@ const subscriberSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const SubScriber = mongoose.model("SubScriber", subscriberSchema);
+const Subscriber = mongoose.model("SubScriber", subscriberSchema);
 
-module.exports = { SubScriber };
+module.exports = { Subscriber };

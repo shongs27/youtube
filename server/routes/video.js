@@ -6,9 +6,6 @@ const { Subscriber } = require("../models/Subscriber");
 const multer = require("multer");
 const path = require("path");
 const ffmpeg = require("fluent-ffmpeg");
-const {
-  default: Subscriber,
-} = require("../../client/src/components/views/VideoDetailPage/Sections/Subscriber");
 
 //=================================
 //             Video
@@ -135,9 +132,11 @@ router.post("/getSubscriptionVideos", (req, res) => {
       });
 
       // 찾은 사람들의 비디오를 가지고 온다
+
+      // 여러명일때는 $in이라는 mongoDB method를 사용한다
       Video.find({ writer: { $in: subscribedUser } })
-        .populate("wirter")
-        .exec((err, video) => {
+        .populate("writer")
+        .exec((err, videos) => {
           if (err) return res.status(400).send(err);
           res.status(200).json({ success: true, videos });
         });

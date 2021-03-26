@@ -1,5 +1,5 @@
+// 구독한 사람 영상만 보여주는 페이지
 import React, { useEffect, useState } from "react";
-import { FaCode } from "react-icons/fa";
 
 import { Typography, Card, Icon, Avatar, Col, Row } from "antd";
 import Axios from "axios";
@@ -8,17 +8,18 @@ import moment from "moment";
 const { Title } = Typography;
 const { Meta } = Card;
 
-function Subscription() {
+function SubscriptionPage() {
   const [Video, setVideo] = useState([]);
-  useEffect(() => {
-    const subscriptionVariation = {
-        userFrom: localStorage.getItem('userId');
-    }
 
-    Axios.get("/api/video/getSubscriptionVideos", 
-    ).then((res) => {
+  const variable = {
+    userFrom: localStorage.getItem("userId"),
+  };
+
+  useEffect(() => {
+    Axios.post("/api/video/getSubscriptionVideos", variable).then((res) => {
+      console.log(res.data);
       if (res.data.success) {
-        setVideo(res.data.allvideos);
+        setVideo(res.data.videos);
       } else {
         alert("비디오 가져오기를 실패했습니다");
       }
@@ -71,4 +72,4 @@ function Subscription() {
   );
 }
 
-export default Subscription;
+export default SubscriptionPage;
