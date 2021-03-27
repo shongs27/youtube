@@ -4,6 +4,7 @@ import Axios from "axios";
 import SideVideo from "./Sections/SideVideo";
 import Subscribe from "./Sections/Subscribe";
 import Comment from "./Sections/Comment";
+import LikeDislike from "./Sections/LikeDislike";
 
 function VideoDetailPage(props) {
   const videoId = props.match.params.videoId;
@@ -30,6 +31,11 @@ function VideoDetailPage(props) {
     });
   }, []);
 
+  const refreshFunction = (newComment) => {
+    setComments([...Comments, newComment]);
+    //setComments(Comments.concat(newComment))
+  };
+
   if (VideoDetail.writer) {
     // console.log(VideoDetail.writer);
 
@@ -52,7 +58,15 @@ function VideoDetailPage(props) {
               controls
             />
             {/* Action을 배열로 규정해놓은 ant API*/}
-            <List.Item actions={[subscibeButton]}>
+            <List.Item
+              actions={[
+                <LikeDislike
+                  userId={localStorage.getItem("userId")}
+                  videoId={videoId}
+                />,
+                subscibeButton,
+              ]}
+            >
               <List.Item.Meta
                 avatar={<Avatar src={VideoDetail.writer.image} />}
                 title={VideoDetail.writer.name}
@@ -60,7 +74,11 @@ function VideoDetailPage(props) {
               />
             </List.Item>
 
-            <Comment commentLists={Comments} postId={videoId} />
+            <Comment
+              refreshFunction={refreshFunction}
+              commentLists={Comments}
+              postId={videoId}
+            />
           </div>
         </Col>
 

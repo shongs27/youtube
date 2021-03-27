@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Comment, Avatar, Button, Input } from "antd";
 import Axios from "axios";
 import { useSelector } from "react-redux";
+import LikeDislike from "./LikeDislike";
 
 const { TextArea } = Input;
 
@@ -12,28 +13,30 @@ function SingleComment(props) {
   const user = useSelector((state) => state.user);
   const videoId = props.postId;
 
-  const variables = {
-    content: CommentValue,
-    writer: user.userData._id, //1. localStorage - userId 2. 리덕스
-    postId: videoId,
-    //1. 라우터의 props전달 2.
-    // responseTo :
-  };
-  Axios.post("/api/comment/saveComment", variables).then((res) => {
-    if (res.data.success) {
-      console.log(res.data.result);
-      setCommentValue("");
-    } else {
-      alert("comment를 저장하지 못했습니다.");
-    }
-  });
-
   const onSubmit = (e) => {
     e.preventDefault();
+
+    const variable = {
+      content: CommentValue,
+      writer: user.userData._id, //1. localStorage - userId 2. 리덕스
+      postId: videoId, //1. 라우터의 props전달 2.
+      responseTo: props.comment._id, //responseTo 없는 애들로 불러와지겠네
+    };
+
+    Axios.post("/api/comment/saveComment", variable).then((res) => {
+      if (res.data.success) {
+        console.log(res.data.result);
+        props.refreshFunction(res.data.result);
+        setCommentValue("");
+        setOpenReply(false);
+      } else {
+        alert("comment를 저장하지 못했습니다.");
+      }
+    });
   };
 
   const onHandleChange = (e) => {
-    setCommentValue(e.currentTarget.CommentValue);
+    setCommentValue(e.currentTarget.value);
   };
 
   const onClickReplyOpen = () => {
@@ -41,10 +44,15 @@ function SingleComment(props) {
   };
 
   const actions = [
+    <LikeDislike
+      userId={localStorage.getItem("userId")}
+      commentId={props.comment._id}
+    />,
     <span onClick={onClickReplyOpen} key="comment-basic=reply-to">
       Reply to
     </span>,
   ];
+
   return (
     <div>
       <Comment

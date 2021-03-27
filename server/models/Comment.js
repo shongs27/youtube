@@ -6,6 +6,8 @@ const commentSchema = mongoose.Schema(
     writer: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      //에러방지
+      required: true,
     },
     postId: {
       type: Schema.Types.ObjectId,
