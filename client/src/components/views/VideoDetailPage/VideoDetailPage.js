@@ -13,6 +13,7 @@ function VideoDetailPage(props) {
 
   //다 가져왔으니 배열형태가 되겠네
   const [Comments, setComments] = useState([]);
+
   useEffect(() => {
     Axios.post("/api/video/getVideoDetail", variable).then((res) => {
       if (res.data.success) {
@@ -22,8 +23,9 @@ function VideoDetailPage(props) {
       }
     });
 
-    Axios.post("/api/comment/getComments", variable).then((res) => {
+    Axios.post("/api/comment/getComment", variable).then((res) => {
       if (res.data.success) {
+        console.log("코멘트", res.data.comments);
         setComments(res.data.comments);
       } else {
         alert("코멘트 정보를 가져오는데 실패했습니다.");
@@ -32,12 +34,12 @@ function VideoDetailPage(props) {
   }, []);
 
   const refreshFunction = (newComment) => {
-    setComments([...Comments, newComment]);
-    //setComments(Comments.concat(newComment))
+    // setComments([...Comments, newComment]);
+    setComments(Comments.concat(newComment));
   };
 
   if (VideoDetail.writer) {
-    // console.log(VideoDetail.writer);
+    // console.log("videodetail:", VideoDetail.writer);
 
     //userTo userFrom 서로 달라야 렌더링
     const subscibeButton = VideoDetail.writer._id !==

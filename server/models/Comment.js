@@ -7,7 +7,7 @@ const commentSchema = mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
       //에러방지
-      required: true,
+      // required: true,
     },
     postId: {
       type: Schema.Types.ObjectId,

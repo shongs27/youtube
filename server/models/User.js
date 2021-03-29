@@ -16,7 +16,6 @@ const userSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    minglength: 5,
   },
   lastname: {
     type: String,

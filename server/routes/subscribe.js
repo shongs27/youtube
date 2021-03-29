@@ -23,10 +23,11 @@ router.post("/subscribeNumber", (req, res) => {
 router.post("/subscribed", (req, res) => {
   Subscriber.find({
     userTo: req.body.userTo,
-    userForm: req.body.userFrom,
+    userFrom: req.body.userFrom,
   }).exec((err, subscribe) => {
     if (err) return res.status(400).send(err);
     //userTo writer에 영상에 하나라도 userFrom이 구독하고 있다면
+
     let result = false;
     if (subscribe.length !== 0) {
       //result를 true로 전환해서
@@ -39,13 +40,14 @@ router.post("/subscribed", (req, res) => {
 //          구독클릭
 //============================
 
-router.post("/unsubscribed", (req, res) => {
+router.post("/unsubscribe", (req, res) => {
   Subscriber.findOneAndDelete({
     userTo: req.body.userTo,
     userFrom: req.body.userFrom,
   }).exec((err, doc) => {
     if (err) return res.status(400).json({ success: false, err });
-    res.status(200).json({ success: true, doc });
+
+    res.status(200).json({ success: true });
   });
 });
 

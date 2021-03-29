@@ -21,10 +21,10 @@ function Subscribe(props) {
     //로그인한 내가 구독 유무 정보 가져오기
     let subscribedVariable = {
       userTo: props.userTo,
-      userFrom: localStorage.getItem("userId"), // 1)
+      userFrom: localStorage.getItem("userId"),
     };
 
-    Axios.post("api/subscribe/subscribed", subscribedVariable).then((res) => {
+    Axios.post("/api/subscribe/subscribed", subscribedVariable).then((res) => {
       if (res.data.success) {
         setSubscribed(res.data.subscribed);
       } else {
@@ -39,7 +39,7 @@ function Subscribe(props) {
       userTo: props.userTo,
       userFrom: props.userFrom, // 2) props설정으로 가져와도 된다
     };
-    // 이미 구독중이라면
+    // 이미 구독중이라면 구독취소
     if (Subscribed) {
       Axios.post("/api/subscribe/unsubscribe", subscribedVariable).then(
         (res) => {
@@ -51,7 +51,7 @@ function Subscribe(props) {
           }
         }
       );
-      // 이미 구독중이 아니라면
+      // 이미 구독중이 아니라면 구독등록
     } else {
       Axios.post("/api/subscribe/subscribe", subscribedVariable).then((res) => {
         if (res.data.success) {

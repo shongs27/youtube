@@ -25,7 +25,6 @@ function SingleComment(props) {
 
     Axios.post("/api/comment/saveComment", variable).then((res) => {
       if (res.data.success) {
-        console.log(res.data.result);
         props.refreshFunction(res.data.result);
         setCommentValue("");
         setOpenReply(false);
@@ -48,7 +47,11 @@ function SingleComment(props) {
       userId={localStorage.getItem("userId")}
       commentId={props.comment._id}
     />,
-    <span onClick={onClickReplyOpen} key="comment-basic=reply-to">
+    <span
+      style={{ marginLeft: "20px", fontWeight: "bold" }}
+      onClick={onClickReplyOpen}
+      key="comment-basic=reply-to"
+    >
       Reply to
     </span>,
   ];
@@ -65,13 +68,18 @@ function SingleComment(props) {
       {OpenReply && (
         <form style={{ display: "flex" }} onSubmit={onSubmit}>
           <textarea
-            style={{ width: "100%", borderRadius: "5px" }}
+            style={{
+              width: "100%",
+              borderRadius: "5px",
+              marginLeft: "20px",
+              marginBottom: "20px",
+            }}
             onChange={onHandleChange}
             value={CommentValue}
             placeholder="코멘트를 작성해 주세요"
           />
           <br />
-          <button style={{ width: "20%", height: "52px" }} onClick>
+          <button style={{ width: "20%", height: "48px" }} onClick>
             {/* // 버튼에 꼭 해줘야 하나?/ */} Submit{" "}
           </button>
         </form>

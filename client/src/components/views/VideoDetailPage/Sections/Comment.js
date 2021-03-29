@@ -14,13 +14,12 @@ function Comment(props) {
     e.preventDefault();
     const variables = {
       content: CommentValue,
-      writer: user.userData._id, //1. localStorage - userId 2. 리덕스
+      writer: user.userData._id, //1. localStorage - userId 2. Redux에서 가져오기
       postId: videoId,
       //1. 라우터의 props전달 2.
     };
     Axios.post("/api/comment/saveComment", variables).then((res) => {
       if (res.data.success) {
-        console.log(res.data.result);
         props.refreshFunction(res.data.result);
         setCommentValue("");
       } else {
@@ -35,7 +34,7 @@ function Comment(props) {
   return (
     <div>
       <br />
-      <p> Replies </p>
+      <h2> Replies </h2>
       <hr />
 
       {/* Comment Lists */}
@@ -49,7 +48,6 @@ function Comment(props) {
                   comment={comments}
                   postId={videoId}
                 />
-
                 <ReplyComment
                   refreshFunction={props.refreshFunction}
                   parentCommentId={comments._id}
