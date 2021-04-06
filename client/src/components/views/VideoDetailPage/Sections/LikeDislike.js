@@ -11,7 +11,7 @@ function LikeDislike(props) {
 
   let variable = {};
   //video 정보 있는 like라면
-  if (props.video) {
+  if (props.videoId) {
     variable = { videoId: props.videoId, userId: props.userid };
   } else {
     //그럼 comment에 있는 like겠네

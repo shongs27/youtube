@@ -9,6 +9,7 @@ const { TextArea } = Input;
 function SingleComment(props) {
   const [OpenReply, setOpenReply] = useState(false);
   const [CommentValue, setCommentValue] = useState("");
+  console.log(props.comment.writer.name);
 
   const user = useSelector((state) => state.user);
   const videoId = props.postId;
@@ -20,7 +21,7 @@ function SingleComment(props) {
       content: CommentValue,
       writer: user.userData._id, //1. localStorage - userId 2. 리덕스
       postId: videoId, //1. 라우터의 props전달 2.
-      responseTo: props.comment._id, //responseTo 없는 애들로 불러와지겠네
+      responseTo: props.comment._id,
     };
 
     Axios.post("/api/comment/saveComment", variable).then((res) => {

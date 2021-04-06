@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { Typography, Button, Form, message, Input, Icon } from "antd";
 import Axios from "axios";
 
-// dropzone 다운받아야함
 import Dropzone from "react-dropzone";
 
 import { VIDEO_SERVER } from "../../Config";
 
 import { useSelector } from "react-redux";
-import { PromiseProvider } from "mongoose";
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -64,8 +62,6 @@ function VideoUploadPage(props) {
 
     Axios.post(`${VIDEO_SERVER}/uploadfiles`, formData, config).then((res) => {
       if (res.data.success) {
-        console.log(res.data);
-
         let variable = {
           url: res.data.url,
           fileName: res.data.fileName,

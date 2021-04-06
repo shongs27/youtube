@@ -25,7 +25,6 @@ function VideoDetailPage(props) {
 
     Axios.post("/api/comment/getComment", variable).then((res) => {
       if (res.data.success) {
-        console.log("코멘트", res.data.comments);
         setComments(res.data.comments);
       } else {
         alert("코멘트 정보를 가져오는데 실패했습니다.");
@@ -51,7 +50,9 @@ function VideoDetailPage(props) {
     );
 
     return (
+      //  행 사이의 간격
       <Row gutter={[16, 16]}>
+        {/* 화면 크기마다 다른 사이즈  */}
         <Col lg={18} xs={24}>
           <div style={{ width: "100%", padding: "3rem 4rem" }}>
             <video

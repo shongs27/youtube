@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const { Video } = require("../models/Video");
-const { Subscriber } = require("../models/Subscriber");
 
 const multer = require("multer");
 const path = require("path");
@@ -20,15 +19,6 @@ const storage = multer.diskStorage({
   },
 });
 
-// const fileFilter = (req, file, cb) => {
-//   // fileFilter는 storage와 위치가 다르다
-//   let ext = path.extname(file.originalname);
-//   if (ext !== ".mp4") {
-//     return cb(new Error("only jpg, png is allowed"), false);
-//   } else {
-//     return cb(null, true);
-//   }
-// };
 
 let upload = multer({ storage }).single("file");
 

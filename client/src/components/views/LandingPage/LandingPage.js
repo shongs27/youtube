@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FaCode } from "react-icons/fa";
 
 import { Typography, Card, Icon, Avatar, Col, Row } from "antd";
 import Axios from "axios";
@@ -25,11 +24,9 @@ function LandingPage() {
     var seconds = Math.floor(video.duration - minutes * 60);
 
     return (
-      /* 사이즈 최소: 6*4 / 중간: 8*3 */
+      /* 사이즈 최소: 6*4 = 24 / 중간: 8*3 = 24 */
       <Col lg={6} md={8} xs={24}>
-        {/* 어디지? */}
         <div style={{ position: "relative" }}>
-          {/* 주소가 왜이렇지? */}
           <a href={`/video/${video._id}`}>
             <img
               style={{ width: "100%" }}
