@@ -114,7 +114,6 @@ function VideoUploadPage(props) {
         <Title level={2}>Upload Video</Title>
       </div>
 
-      {/* Form과 button onSubmit={onSubmit} 언제 어떻게 붙여주는지 눈치 싸움 */}
       <Form>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           {/* Drop Zone */}

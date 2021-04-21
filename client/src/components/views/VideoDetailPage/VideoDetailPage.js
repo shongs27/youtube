@@ -8,11 +8,13 @@ import LikeDislike from "./Sections/LikeDislike";
 
 function VideoDetailPage(props) {
   const videoId = props.match.params.videoId;
-  const variable = { videoId }; //꼭 객체로 만들어야 하나?
+  const variable = { videoId }; //객체로 만들어서 전송
   const [VideoDetail, setVideoDetail] = useState([]);
+  console.log("비디오디테일", VideoDetail);
 
   //다 가져왔으니 배열형태가 되겠네
   const [Comments, setComments] = useState([]);
+  console.log("코멘트들", Comments);
 
   useEffect(() => {
     Axios.post("/api/video/getVideoDetail", variable).then((res) => {
@@ -33,8 +35,8 @@ function VideoDetailPage(props) {
   }, []);
 
   const refreshFunction = (newComment) => {
-    // setComments([...Comments, newComment]);
-    setComments(Comments.concat(newComment));
+    setComments([...Comments, ...newComment]);
+    // setComments(Comments.concat(newComment));
   };
 
   if (VideoDetail.writer) {
